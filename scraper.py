@@ -35,4 +35,4 @@ with open(csv_filename, mode="w", newline="", encoding="utf-8") as csv_file:
 
         writer.writerow([titulo, empresa, ubicacion, url_detalle])
 
-print(f"Extracción completada. Datos guardados en {csv_filename}")
+print(f"Extraction completed. Data saved to {csv_filename}")
