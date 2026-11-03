@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://realpython.github.io/fake-jobs/"
 CSV_FILE = Path("jobs.csv")
-FIELDNAMES = ["titulo", "empresa", "ubicacion", "url_detalle"]
+FIELDNAMES = ["title", "company", "location", "detail_url"]
 REQUEST_TIMEOUT = 15
 
 
@@ -35,10 +35,10 @@ def extract_jobs(html: str, base_url: str = BASE_URL) -> List[Dict[str, str]]:
         href = apply_link.get("href") if apply_link else None
         jobs.append(
             {
-                "titulo": title.get_text(strip=True) if title else "N/A",
-                "empresa": company.get_text(strip=True) if company else "N/A",
-                "ubicacion": location.get_text(strip=True) if location else "N/A",
-                "url_detalle": urljoin(base_url, href) if href else "N/A",
+                "title": title.get_text(strip=True) if title else "N/A",
+                "company": company.get_text(strip=True) if company else "N/A",
+                "location": location.get_text(strip=True) if location else "N/A",
+                "detail_url": urljoin(base_url, href) if href else "N/A",
             }
         )
 
