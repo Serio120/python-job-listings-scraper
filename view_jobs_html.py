@@ -22,10 +22,10 @@ def render_jobs_html(rows: List[Dict[str, str]]) -> str:
 
     for row in rows:
         cells = []
-        for field in ("titulo", "empresa", "ubicacion", "url_detalle"):
+        for field in ("title", "company", "location", "detail_url"):
             value = row.get(field, "N/A")
             safe_value = escape(value)
-            if field == "url_detalle" and _safe_http_url(value):
+            if field == "detail_url" and _safe_http_url(value):
                 cells.append(
                     '<td><a href="{}" target="_blank" '
                     'rel="noopener noreferrer">{}</a></td>'.format(safe_value, safe_value)
@@ -35,11 +35,11 @@ def render_jobs_html(rows: List[Dict[str, str]]) -> str:
         body_rows.append("<tr>" + "".join(cells) + "</tr>")
 
     return """<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ofertas de empleo</title>
+  <title>Job listings</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; }
     table { border-collapse: collapse; width: 100%; }
@@ -50,9 +50,9 @@ def render_jobs_html(rows: List[Dict[str, str]]) -> str:
   </style>
 </head>
 <body>
-  <h1>Ofertas de empleo</h1>
+  <h1>Job listings</h1>
   <table>
-    <thead><tr><th>Título</th><th>Empresa</th><th>Ubicación</th><th>URL</th></tr></thead>
+    <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Details</th></tr></thead>
     <tbody>
 """ + "\n".join(body_rows) + """
     </tbody>
