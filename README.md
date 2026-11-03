@@ -1,201 +1,98 @@
-# 🕷️ Python Job Listings Scraper
+# Python Job Listings Scraper
 
-> A lightweight Python web scraper that extracts job listings from the **Fake Python Jobs** demo site and exports them to CSV and HTML.
+A small Python scraper that extracts job listings from the [Real Python Fake Python Jobs demo site](https://realpython.github.io/fake-jobs/) and exports them to CSV and HTML.
 
-Built as part of the [Roadmap.sh Job Listings Scraper project](https://roadmap.sh/projects/job-listings-scraper).
+Built as a learning project for the [Roadmap.sh Job Listings Scraper challenge](https://roadmap.sh/projects/job-listings-scraper).
 
----
+## Features
 
-## 🎯 Project Overview
+- Fetch the demo job board using Requests.
+- Parse listing cards with Beautiful Soup.
+- Extract title, company, location and detail URL.
+- Resolve relative detail links against the source URL.
+- Export a UTF-8 CSV file.
+- Render a standalone HTML report.
+- Escape scraped values before inserting them into HTML.
+- Apply an HTTP request timeout and fail clearly on unsuccessful responses.
+- Unit tests for extraction, URL handling, CSV output and HTML escaping.
 
-This project demonstrates a simple end-to-end web scraping workflow in Python:
+## Requirements
 
-```text
-Web page
-   ↓
-HTTP request
-   ↓
-HTML parsing with BeautifulSoup
-   ↓
-Job data extraction
-   ↓
-CSV export
-   ↓
-HTML report generation
-```
+- Python 3.8 or later
+- Internet access to fetch the demo page
 
-The scraper collects the main information from each job listing and stores it in a structured CSV file. A second script converts that CSV data into a readable HTML table.
-
----
-
-## ✨ Features
-
-- 🌐 Fetch job listings from a public demo website.
-- 🔎 Parse HTML with **BeautifulSoup4**.
-- 📋 Extract job title, company, location, and job detail URL.
-- 💾 Export results to `jobs.csv`.
-- 📊 Generate a browser-friendly `jobs.html` report.
-- 🔗 Convert job URLs into clickable links.
-- 🛡️ Handle missing fields without stopping the extraction process.
-- 🪶 Keep the implementation lightweight with minimal dependencies.
-
----
-
-## 🧰 Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| **Python 3.8+** | Application and data processing |
-| **Requests** | HTTP requests |
-| **BeautifulSoup4** | HTML parsing and data extraction |
-| **CSV** | Structured data export |
-| **Pathlib** | File handling |
-| **HTML / CSS** | Generated job listings report |
-
-`requests`, `csv`, and `pathlib` are part of the Python standard library. The only external dependency is **BeautifulSoup4**.
-
----
-
-## 📁 Project Structure
-
-```text
-python-job-listings-scraper/
-│
-├── scraper.py            # Scrapes job listings and creates jobs.csv
-├── view_jobs_html.py     # Converts jobs.csv into jobs.html
-└── README.md
-```
-
-The following files are generated when the scripts are executed:
-
-```text
-jobs.csv                  # Scraped job data
-jobs.html                 # HTML report
-```
-
----
-
-## ⚙️ Requirements
-
-- **Python 3.8 or later**
-- Internet connection
-
-Install the required dependency:
+Install dependencies:
 
 ```bash
-pip install beautifulsoup4
+python -m venv .venv
+# Linux/macOS
+source .venv/bin/activate
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+python -m pip install -r requirements.txt
 ```
 
-If `requests` is not available in your Python environment, install it with:
+## Usage
 
-```bash
-pip install requests
-```
-
----
-
-## 🚀 Usage
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Serio120/python-job-listings-scraper.git
-cd python-job-listings-scraper
-```
-
-### 2. Run the scraper
+Run the scraper:
 
 ```bash
 python scraper.py
 ```
 
-The script retrieves the job listings and creates:
+This creates `jobs.csv` with the columns:
 
-```text
-jobs.csv
-```
-
-Expected output:
-
-```text
-Extraction completed. Data saved to jobs.csv
-```
-
-### 3. Generate the HTML report
-
-```bash
-python view_jobs_html.py
-```
-
-This creates:
-
-```text
-jobs.html
-```
-
-Open `jobs.html` in a web browser to view the extracted listings in a formatted table.
-
-### 4. Run the complete workflow
-
-```bash
-python scraper.py
-python view_jobs_html.py
-```
-
----
-
-## 📊 Extracted Data
-
-Each job listing contains the following fields:
-
-| Field | Description |
+| Column | Description |
 |---|---|
 | `title` | Job title |
 | `company` | Company name |
 | `location` | Job location |
-| `detail_url` | URL of the job detail page |
+| `detail_url` | Absolute URL to the listing |
 
-Missing values are represented as `N/A` rather than causing the extraction process to fail.
+Generate the HTML report:
 
----
+```bash
+python view_jobs_html.py
+```
 
-## 🧠 What This Project Demonstrates
+This creates `jobs.html`. Open it in a browser to view the extracted listings.
 
-Although intentionally small, this project covers several fundamental concepts that are useful when building data collection tools with Python:
+## Tests
 
-- HTTP requests and response handling.
-- HTML document parsing.
-- DOM element selection.
-- Defensive extraction of optional fields.
-- Structured CSV generation.
-- Transformation of structured data into HTML.
-- Basic file-system operations.
-- Separation of data collection from presentation.
+Run the standard-library unittest suite from the repository root:
 
----
+```bash
+python -m unittest discover -s tests -v
+```
 
-## ⚠️ Notes & Limitations
+The tests use mocked HTTP responses and local HTML fixtures, so they do not require a network connection.
 
-This project targets the **Fake Python Jobs** website provided by Real Python for learning and scraping practice. It is a static demonstration site, so JavaScript rendering is not required.
+## Project structure
 
-The scraper is intentionally simple and is not designed as a production-grade crawling system. It does not include features such as pagination, retries, rate limiting, persistent databases, or scheduled execution.
+```text
+python-job-listings-scraper/
+├── scraper.py
+├── view_jobs_html.py
+├── requirements.txt
+├── tests/
+│   └── test_scraper.py
+└── README.md
+```
 
----
+Generated files (`jobs.csv` and `jobs.html`) are runtime outputs and should not be committed.
 
-## 📚 Reference
+## Notes and limitations
 
-- [Roadmap.sh — Job Listings Scraper](https://roadmap.sh/projects/job-listings-scraper)
-- [Fake Python Jobs — Real Python](https://realpython.github.io/fake-jobs/)
-- [Beautiful Soup Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+This project targets a static demonstration site intended for learning. It is not a general-purpose crawler and does not implement pagination, persistent storage, scheduling or production-scale crawling. When adapting it to another site, respect that site's terms, robots policies, rate limits and privacy requirements.
 
----
+## References
 
-## 📄 License
+- [Real Python Fake Python Jobs](https://realpython.github.io/fake-jobs/)
+- [Requests documentation](https://requests.readthedocs.io/)
+- [Beautiful Soup documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+- [Python unittest documentation](https://docs.python.org/3/library/unittest.html)
 
-No license is currently specified for this repository.
+## License
 
----
-
-<p align="center">
-  <i>Learn by building · Scrape · Transform · Explore</i>
-</p>
+No license is currently specified for this repository. Check the repository owner’s licensing intentions before reusing the code.
