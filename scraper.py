@@ -2,6 +2,7 @@
 
 import csv
 from pathlib import Path
+from typing import Dict, List, Union
 from urllib.parse import urljoin
 
 import requests
@@ -13,7 +14,7 @@ FIELDNAMES = ["titulo", "empresa", "ubicacion", "url_detalle"]
 REQUEST_TIMEOUT = 15
 
 
-def extract_jobs(html: str, base_url: str = BASE_URL) -> list[dict[str, str]]:
+def extract_jobs(html: str, base_url: str = BASE_URL) -> List[Dict[str, str]]:
     """Extract job listings from a page of HTML."""
     soup = BeautifulSoup(html, "html.parser")
     jobs = []
@@ -44,7 +45,7 @@ def extract_jobs(html: str, base_url: str = BASE_URL) -> list[dict[str, str]]:
     return jobs
 
 
-def fetch_jobs(url: str = BASE_URL, timeout: int = REQUEST_TIMEOUT) -> list[dict[str, str]]:
+def fetch_jobs(url: str = BASE_URL, timeout: int = REQUEST_TIMEOUT) -> List[Dict[str, str]]:
     """Download the job board and return its extracted listings."""
     response = requests.get(url, timeout=timeout)
     response.raise_for_status()
@@ -52,7 +53,7 @@ def fetch_jobs(url: str = BASE_URL, timeout: int = REQUEST_TIMEOUT) -> list[dict
 
 
 def write_jobs_csv(
-    jobs: list[dict[str, str]], output_path: Path | str = CSV_FILE
+    jobs: List[Dict[str, str]], output_path: Union[Path, str] = CSV_FILE
 ) -> Path:
     """Write extracted listings to a UTF-8 CSV file."""
     output = Path(output_path)
@@ -66,7 +67,7 @@ def write_jobs_csv(
 def main() -> None:
     jobs = fetch_jobs()
     output = write_jobs_csv(jobs)
-    print(f"Extraction completed. {len(jobs)} jobs saved to {output}")
+    print("Extraction completed. {} jobs saved to {}".format(len(jobs), output))
 
 
 if __name__ == "__main__":
