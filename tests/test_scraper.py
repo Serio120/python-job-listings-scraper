@@ -28,20 +28,20 @@ class ExtractJobsTests(unittest.TestCase):
         )
 
         self.assertEqual(len(jobs), 2)
-        self.assertEqual(jobs[0]["titulo"], "Python Developer")
-        self.assertEqual(jobs[0]["empresa"], "Example Ltd")
-        self.assertEqual(jobs[0]["ubicacion"], "Madrid")
+        self.assertEqual(jobs[0]["title"], "Python Developer")
+        self.assertEqual(jobs[0]["company"], "Example Ltd")
+        self.assertEqual(jobs[0]["location"], "Madrid")
         self.assertEqual(
-            jobs[0]["url_detalle"],
+            jobs[0]["detail_url"],
             "https://example.test/jobs/python-developer",
         )
 
     def test_missing_fields_use_na(self):
         job = scraper.extract_jobs(SAMPLE_HTML)[1]
 
-        self.assertEqual(job["empresa"], "N/A")
-        self.assertEqual(job["ubicacion"], "N/A")
-        self.assertEqual(job["url_detalle"], "N/A")
+        self.assertEqual(job["company"], "N/A")
+        self.assertEqual(job["location"], "N/A")
+        self.assertEqual(job["detail_url"], "N/A")
 
     @patch("scraper.requests.get")
     def test_fetch_uses_timeout_and_checks_http_status(self, get):
@@ -72,25 +72,25 @@ class HtmlReportTests(unittest.TestCase):
     def test_escapes_scraped_content(self):
         html = render_jobs_html(
             [{
-                "titulo": "<script>alert(1)</script>",
-                "empresa": "Example & Co",
-                "ubicacion": "Madrid",
-                "url_detalle": "https://example.test/job?id=1&x=2",
+                "title": "<script>alert(1)</script>",
+                "company": "Example & Co",
+                "location": "Madrid",
+                "detail_url": "https://example.test/job?id=1&x=2",
             }]
         )
 
         self.assertNotIn("<script>", html)
         self.assertIn("&lt;script&gt;", html)
         self.assertIn("Example &amp; Co", html)
-        self.assertIn("rel=\"noopener noreferrer\"", html)
+        self.assertIn('rel="noopener noreferrer"', html)
 
     def test_does_not_link_non_http_urls(self):
         html = render_jobs_html(
             [{
-                "titulo": "Developer",
-                "empresa": "Example",
-                "ubicacion": "Remote",
-                "url_detalle": "javascript:alert(1)",
+                "title": "Developer",
+                "company": "Example",
+                "location": "Remote",
+                "detail_url": "javascript:alert(1)",
             }]
         )
 
